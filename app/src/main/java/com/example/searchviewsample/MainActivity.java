@@ -10,24 +10,48 @@ import android.os.Bundle;
 import android.provider.BaseColumns;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.CursorAdapter;
+import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.SimpleCursorAdapter;
+
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-//    private static final String[] SUGGESTIONS = {
-//            "Bauru", "Sao Paulo", "Rio de Janeiro",
-//            "Bahia", "Mato Grosso", "Minas Gerais",
-//            "Tocantins", "Rio Grande do Sul"
-//    };
     private ArrayList<Place> listPlaces;
     private SimpleCursorAdapter mAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        LinearLayout linear_layout = findViewById(R.id.bottomLayout);
+        findViewById(R.id.tv_title).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Snackbar.make(v,"clicked", BaseTransientBottomBar.LENGTH_LONG).show();
+                Animation slide_up = AnimationUtils.loadAnimation(getApplicationContext(),
+                        R.anim.slide_up);
+                linear_layout.setVisibility(View.VISIBLE);
+                linear_layout.setAnimation(slide_up);
+            }
+        });
+        findViewById(R.id.close).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Load animation
+                Animation slide_down = AnimationUtils.loadAnimation(getApplicationContext(),
+                        R.anim.slide_down);
+                // Start animation
+                linear_layout.startAnimation(slide_down);
+                linear_layout.setVisibility(View.GONE);
+            }
+        });
         setupData();
         mAdapter = new SimpleCursorAdapter(this,
                 R.layout.item_layout,
